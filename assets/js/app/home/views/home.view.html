@@ -1,0 +1,40 @@
+<!-- Page Contents -->
+<div class="pusher" ng-controller=HomeController>
+
+    <div class="ui vertical stripe segment">
+        <div class="ui container">
+            <h3>{{registerObject.date}}</h3>
+            <div class="ui top attached tabular menu">
+                <a class="active item" data-tab="first">Full Text</a>
+                <a class="item" data-tab="second">General</a>
+                <a class="item" data-tab="third">Charts</a>
+            </div>
+            <div class="ui bottom attached active tab segment" data-tab="first">
+                {{registerFullText}}                
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="second">
+                <table class="ui celled responsibe table">
+                    <thead>
+                        <tr>
+                            <th>Register</th>
+                            <th>Values</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, value) in registerObject.REGISTERS">
+                            <td>{{key}}</td>
+                            <td>{{value}}</td>
+                            <td class="positive"><i class="icon checkmark"></i><i class="icon close"></i>None</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="third">
+                Charts
+            </div>
+        </div>
+    </div>
+
+
+</div>
