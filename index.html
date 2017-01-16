@@ -9,22 +9,37 @@
     <!-- Standard Meta -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <!--link rel="stylesheet" href="../assets/styles/importer.css"-->
     <link rel="stylesheet" href="assets/styles/semantic.min.css">
-    
+
 </head>
+
 <body ng-view>
-    
-    
-<!--SCRIPTS-->
+
+
+    <!--SCRIPTS-->
     <!--script src="assets/js/dependencies/sails.io.js"></script-->
     <script src="assets/js/dependencies/angular.min.js"></script>
     <script src="assets/js/dependencies/jquery.min.js"></script>
     <script src="assets/js/dependencies/angular-route.min.js"></script>
     <script src="assets/js/dependencies/semantic.min.js"></script>
     <script src="assets/js/app/app.js"></script>
-    <script src="assets/js/app/home/home.js"></script>
+    <script>
+        angular.module('home', []);
+
+        angular.module('home').config(['$routeProvider',
+            function ($routeProvider) {
+                $routeProvider.
+                    when('/', {
+                        templateUrl: 'assets/js/app/home/views/home.view.html'
+                    }).
+                    otherwise({
+                        redirectTo: '/'
+                    });
+            }
+        ]);
+    </script>
     <script src="assets/js/app/home/controllers/home.controller.js"></script>
     <script src="assets/js/app/home/services/home.service.js"></script>
     <!--SCRIPTS END-->
