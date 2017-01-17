@@ -1,16 +1,9 @@
 angular.module('home').service('HomeService', ['$http',
     function ($http) {
-        this.getRegisterObject = function (data) {
+        this.getRegisterAll = function (data) {
             return $http({
                 method: 'GET',
-                url: '/register/object'
-            });
-        }
-
-        this.getRegisterFullText = function (data) {
-            return $http({
-                method: 'GET',
-                url: '/register'
+                url: '/register/all'
             });
         }
     }

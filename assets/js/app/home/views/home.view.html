@@ -7,12 +7,29 @@
             <div class="ui top attached tabular menu">
                 <a class="active item" data-tab="first">Full Text</a>
                 <a class="item" data-tab="second">General</a>
-                <a class="item" data-tab="third">Charts</a>
+                <a class="item" data-tab="third">Resumen</a>
+                <a class="item" data-tab="fourth">Charts</a>
             </div>
             <div class="ui bottom attached active tab segment" data-tab="first">
                 {{registerFullText}}                
             </div>
             <div class="ui bottom attached tab segment" data-tab="second">
+                <table class="ui celled responsibe table">
+                    <thead>
+                        <tr>
+                            <th>Register</th>
+                            <th>Values</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="n in registerArray track by $index">                            
+                            <td>{{ ($index!=0) ? n.split(":")[0] : n}}</td>
+                            <td>{{($index!=0) ? n.split(":")[1]:""}}</td>                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="third">
                 <table class="ui celled responsibe table">
                     <thead>
                         <tr>
@@ -30,7 +47,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="ui bottom attached tab segment" data-tab="third">
+            <div class="ui bottom attached tab segment" data-tab="fourth">
                 Charts
             </div>
         </div>

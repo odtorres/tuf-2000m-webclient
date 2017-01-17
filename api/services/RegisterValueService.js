@@ -11,6 +11,9 @@ var registerValuesText = "";
 /** Register array  */
 var registerValuesArray = [];
 
+/** Register array  */
+var registerValuesA = [];
+
 /** Register Object  */
 var registerValuesObject = {};
 
@@ -18,6 +21,7 @@ var registerValuesObject = {};
 module.exports = {
     init: function (done) {
         registerValuesText = "";
+        registerValuesA = [];
         http.get(url, function (response) {
             response.setEncoding('utf8');
 
@@ -26,12 +30,12 @@ module.exports = {
             });
 
             response.on('end', function () {
-
-                registerValuesArray = registerValuesText.split("\r\n");
-                registerValuesArray = registerValuesArray.map(function(e,i,a){
-                    if(i==0)
-                        return e;
-                    return e.split(":")[1];
+                registerValuesA = registerValuesText.split("\r\n");
+                registerValuesA.forEach(function (e, i, a) {
+                    if (i == 0)
+                        registerValuesArray[i] = e;
+                    else
+                        registerValuesArray[i] = e.split(":")[1];
                 });
                 registerValuesObject.date = registerValuesArray[0];
                 registerValuesObject.REGISTERS = {};
@@ -68,7 +72,7 @@ module.exports = {
                 registerValuesObject.REGISTERS["(61) LCD Back-lit lights"] = [registerValuesArray[61]];
                 registerValuesObject.REGISTERS["(62) Times for the beeper"] = [registerValuesArray[62]];
                 registerValuesObject.REGISTERS["(62) Pulses left for OCT"] = [registerValuesArray[62]];
-                registerValuesObject.REGISTERS["(72) Error Code"] = (registerValuesArray[72]>>>0).toString(2);
+                registerValuesObject.REGISTERS["(72) Error Code"] = (registerValuesArray[72] >>> 0).toString(2);
                 registerValuesObject.REGISTERS["(77-78) PT100 resistance of inlet"] = [registerValuesArray[77], registerValuesArray[78]];
                 registerValuesObject.REGISTERS["(79-80) PT100 resistance of outlet"] = [registerValuesArray[79], registerValuesArray[80]];
                 registerValuesObject.REGISTERS["(81-82) Total travel time"] = [registerValuesArray[81], registerValuesArray[82]];
@@ -79,8 +83,8 @@ module.exports = {
                 registerValuesObject.REGISTERS["(92) Working step and Signal Quality"] = [registerValuesArray[92]];
                 registerValuesObject.REGISTERS["(93) Upstream strength"] = [registerValuesArray[93]];
                 registerValuesObject.REGISTERS["(94) Downstream strength"] = [registerValuesArray[94]];
-                registerValuesObject.REGISTERS["(96) Language"] = (registerValuesArray[96]==0)?"English":
-                                                                  (registerValuesArray[96]==1)?"Chinese":"Other";//0 : English，1:Chinese
+                registerValuesObject.REGISTERS["(96) Language"] = (registerValuesArray[96] == 0) ? "English" :
+                    (registerValuesArray[96] == 1) ? "Chinese" : "Other";//0 : English，1:Chinese
                 registerValuesObject.REGISTERS["(97-98) Rate of the measured travel"] = [registerValuesArray[97], registerValuesArray[98]];
                 registerValuesObject.REGISTERS["(99-100) Reynolds number"] = [registerValuesArray[99], registerValuesArray[100]];
 
@@ -100,13 +104,19 @@ module.exports = {
 
     getRegisterArray: function (done) {
         return this.init(function () {
-            done(registerValuesArray);
+            done(registerValuesA);
         });
     },
 
     getRegisterObject: function (done) {
         return this.init(function () {
             done(registerValuesObject);
+        });
+    },
+
+    getAllRegister: function (done) {
+        return this.init(function () {
+            done(registerValuesText, registerValuesA, registerValuesObject);
         });
     }
 
