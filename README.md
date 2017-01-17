@@ -8,14 +8,18 @@ A Web Server that parses the tuf-2000m data, converts it to human readable data 
 
 ## Installation
 1. step 1 - git clone https://github.com/odtorres/tuf-2000m-webclient.git
-2. step 2 - npm install
-3. step 3 - sails lift 
+2. step 2 - cd /tuf-2000m-webclient
+3. step 3 - npm install
+4. step 4 - sails lift 
 
 ## Back-end REST service
 1. http://localhost:1337/register - Full Text.
 2. http://localhost:1337/register/array - Values in an Array.
 2. http://localhost:1337/register/object - Values in an Object.
 2. http://localhost:1337/register/all - All in.
+
+## Front-end access
+http://localhost:1337/
 
 ## Author
 GitHub: [odtorres](https://github.com/odtorres)
@@ -37,5 +41,3 @@ GitHub: [odtorres](https://github.com/odtorres)
 
   You should have received a copy of the GNU Affero General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
