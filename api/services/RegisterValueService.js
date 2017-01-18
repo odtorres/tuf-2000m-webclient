@@ -19,7 +19,7 @@ var registerValuesObject = {};
 
 
 module.exports = {
-    init: function (done) {
+    init: function (done,self) {
         registerValuesText = "";
         registerValuesA = [];
         http.get(url, function (response) {
@@ -39,6 +39,7 @@ module.exports = {
                 });
                 registerValuesObject.date = registerValuesArray[0];
                 registerValuesObject.REGISTERS = {};
+                registerValuesObject.NOTES = {};
                 registerValuesObject.REGISTERS["(1-2) Flow Rate "] = [registerValuesArray[1], registerValuesArray[2]];
                 registerValuesObject.REGISTERS["(3-4) Energy Flow Rate"] = [registerValuesArray[3], registerValuesArray[4]];
                 registerValuesObject.REGISTERS["(5-6) Velocity"] = [registerValuesArray[5], registerValuesArray[6]];
@@ -49,7 +50,7 @@ module.exports = {
                 registerValuesObject.REGISTERS["(15-16) Negative decimal fraction"] = [registerValuesArray[15], registerValuesArray[16]];
                 registerValuesObject.REGISTERS["(17-18) Positive energy accumulator"] = [registerValuesArray[17], registerValuesArray[18]];
                 registerValuesObject.REGISTERS["(19-20) Positive energy decimal fraction"] = [registerValuesArray[19], registerValuesArray[20]];
-                registerValuesObject.REGISTERS["(21-22) Negative energy accumulator"] = [registerValuesArray[21], registerValuesArray[22]];
+                registerValuesObject.REGISTERS["(21-22) Negative energy accumulator"] = parseInt(registerValuesArray[21]) - parseInt(registerValuesArray[22]);
                 registerValuesObject.REGISTERS["(23-24) Negative energy decimal fraction"] = [registerValuesArray[23], registerValuesArray[24]];
                 registerValuesObject.REGISTERS["(25-26) Net accumulator"] = [registerValuesArray[25], registerValuesArray[26]];
                 registerValuesObject.REGISTERS["(27-28) Net decimal fraction"] = [registerValuesArray[27], registerValuesArray[28]];
@@ -64,15 +65,18 @@ module.exports = {
                 registerValuesObject.REGISTERS["(45-46) Current input at AI3"] = [registerValuesArray[45], registerValuesArray[46]];
                 registerValuesObject.REGISTERS["(47-48) Current input at AI3"] = [registerValuesArray[47], registerValuesArray[48]];
                 registerValuesObject.REGISTERS["(49-50) System password"] = [registerValuesArray[49], registerValuesArray[50]];
-                registerValuesObject.REGISTERS["(51) Password for hardware"] = [registerValuesArray[51]];
+                registerValuesObject.REGISTERS["(51) Password for hardware"] = registerValuesArray[51];
                 registerValuesObject.REGISTERS["(53-55) Calendar"] = [registerValuesArray[53], registerValuesArray[54], registerValuesArray[55]];
-                registerValuesObject.REGISTERS["(56) Day+Hour for Auto-Sav"] = [registerValuesArray[56]];
-                registerValuesObject.REGISTERS["(59) Key to input"] = [registerValuesArray[59]];
-                registerValuesObject.REGISTERS["(60) Go to Window #"] = [registerValuesArray[60]];
-                registerValuesObject.REGISTERS["(61) LCD Back-lit lights"] = [registerValuesArray[61]];
-                registerValuesObject.REGISTERS["(62) Times for the beeper"] = [registerValuesArray[62]];
-                registerValuesObject.REGISTERS["(62) Pulses left for OCT"] = [registerValuesArray[62]];
+                registerValuesObject.REGISTERS["(56) Day+Hour for Auto-Sav"] = registerValuesArray[56];
+                registerValuesObject.REGISTERS["(59) Key to input"] = registerValuesArray[59];
+                registerValuesObject.REGISTERS["(60) Go to Window #"] = registerValuesArray[60];
+                registerValuesObject.REGISTERS["(61) LCD Back-lit lights"] = registerValuesArray[61];
+                registerValuesObject.REGISTERS["(62) Times for the beeper"] = registerValuesArray[62];
+                registerValuesObject.REGISTERS["(62) Pulses left for OCT"] = registerValuesArray[62];
+                
                 registerValuesObject.REGISTERS["(72) Error Code"] = (registerValuesArray[72] >>> 0).toString(2);
+                registerValuesObject.NOTES["(72) Error Code"] = self.evaluateErrorCode(registerValuesObject.REGISTERS["(72) Error Code"]);
+
                 registerValuesObject.REGISTERS["(77-78) PT100 resistance of inlet"] = [registerValuesArray[77], registerValuesArray[78]];
                 registerValuesObject.REGISTERS["(79-80) PT100 resistance of outlet"] = [registerValuesArray[79], registerValuesArray[80]];
                 registerValuesObject.REGISTERS["(81-82) Total travel time"] = [registerValuesArray[81], registerValuesArray[82]];
@@ -80,11 +84,14 @@ module.exports = {
                 registerValuesObject.REGISTERS["(85-86) Upstream travel time"] = [registerValuesArray[85], registerValuesArray[86]];
                 registerValuesObject.REGISTERS["(87-88) Downstream travel time"] = [registerValuesArray[87], registerValuesArray[88]];
                 registerValuesObject.REGISTERS["(89-90) Output current"] = [registerValuesArray[89], registerValuesArray[90]];
-                registerValuesObject.REGISTERS["(92) Working step and Signal Quality"] = [registerValuesArray[92]];
-                registerValuesObject.REGISTERS["(93) Upstream strength"] = [registerValuesArray[93]];
-                registerValuesObject.REGISTERS["(94) Downstream strength"] = [registerValuesArray[94]];
-                registerValuesObject.REGISTERS["(96) Language"] = (registerValuesArray[96] == 0) ? "English" :
-                    (registerValuesArray[96] == 1) ? "Chinese" : "Other";//0 : English，1:Chinese
+                registerValuesObject.REGISTERS["(92) Working step and Signal Quality"] = registerValuesArray[92];
+                registerValuesObject.REGISTERS["(93) Upstream strength"] = registerValuesArray[93];
+                registerValuesObject.REGISTERS["(94) Downstream strength"] = registerValuesArray[94];
+
+                registerValuesObject.REGISTERS["(96) Language"] = registerValuesArray[96];
+                registerValuesObject.NOTES["(96) Language"] = [(registerValuesArray[96] == 0) ? "English" :
+                    (registerValuesArray[96] == 1) ? "Chinese" : "Other",true];//0 : English，1:Chinese
+
                 registerValuesObject.REGISTERS["(97-98) Rate of the measured travel"] = [registerValuesArray[97], registerValuesArray[98]];
                 registerValuesObject.REGISTERS["(99-100) Reynolds number"] = [registerValuesArray[99], registerValuesArray[100]];
 
@@ -99,25 +106,84 @@ module.exports = {
     getRegisterValues: function (done) {
         return this.init(function () {
             done(registerValuesText);
-        });
+        },this);
     },
 
     getRegisterArray: function (done) {
         return this.init(function () {
             done(registerValuesA);
-        });
+        },this);
     },
 
     getRegisterObject: function (done) {
         return this.init(function () {
             done(registerValuesObject);
-        });
+        },this);
     },
 
     getAllRegister: function (done) {
         return this.init(function () {
             done(registerValuesText, registerValuesA, registerValuesObject);
-        });
+        },this);
+    },
+
+    evaluateErrorCode: function (errorCode) {
+        var message = "";
+        errorCode = errorCode.split("").reverse().join("");
+        for (i = 0; i < errorCode.length ; i++) {                    
+            if (errorCode.charAt(i) == '1')
+                switch (i) {
+                    case 0:
+                        message += "no received signal. ";
+                        break;
+                    case 1:
+                        message += "low received signal. ";
+                        break;
+                    case 2:
+                        message += "poor received signal. ";
+                        break;
+                    case 3:
+                        message += "pipe empty.";
+                        break;
+                    case 4:
+                        message += "hardware failure.";
+                        break;
+                    case 5:
+                        message += "receiving circuits gain in adjusting.";
+                        break;
+                    case 6:
+                        message += "frequency at the frequency output over flow.";
+                        break;
+                    case 7:
+                        message += "current at 4-20mA over flow.";
+                        break;
+                    case 8:
+                        message += "RAM check-sum error.";
+                        break;
+                    case 9:
+                        message += "main clock or timer clock error.";
+                        break;
+                    case 10:
+                        message += "parameters check-sum error.";
+                        break;
+                    case 11:
+                        message += "ROM check-sum error.";
+                        break;
+                    case 12:
+                        message += "temperature circuits error.";
+                        break;
+                    case 13:
+                        message += "reserved.";
+                        break;
+                    case 14:
+                        message += "internal timer over flow.";
+                        break;
+                    case 15:
+                        message += "analog input over range.";
+                        break;
+                }
+        }
+        return [ message , message.length==0 ];
     }
 
 }

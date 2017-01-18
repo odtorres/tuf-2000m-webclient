@@ -42,7 +42,11 @@
                         <tr ng-repeat="(key, value) in registerObject.REGISTERS">
                             <td>{{key}}</td>
                             <td>{{value}}</td>
-                            <td class="positive"><i class="icon checkmark"></i><i class="icon close"></i>None</td>
+                            <td class="positive">
+                                <i class="icon checkmark" ng-if="registerObject.NOTES[key] && registerObject.NOTES[key][1]"></i>
+                                <i class="icon close" ng-if="registerObject.NOTES[key] && !registerObject.NOTES[key][1]"></i>
+                                    {{registerObject.NOTES[key][0]}}
+                            </td>
                         </tr>
                     </tbody>
                 </table>

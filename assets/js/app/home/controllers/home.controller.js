@@ -4,8 +4,7 @@ angular.module('home').controller('HomeController', ['$scope', 'HomeService',
         $scope.registerObject ={};
         $scope.registerArray = [];
 
-        HomeService.getRegisterAll().then(function successCallback(response) {    
-            console.debug(response);
+        HomeService.getRegisterAll().then(function successCallback(response) {
             $scope.registerFullText = response.data.registerValuesText;
             $scope.registerArray = response.data.registerValuesA;
             $scope.registerObject = response.data.registerValuesObject;
